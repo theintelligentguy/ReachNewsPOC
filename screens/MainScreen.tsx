@@ -14,7 +14,7 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const fetchNews = async () => {
     try {
-      const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=29120241a6c74483b9810245c2818dd2`);
+      const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=29120241a6c74483b9810245c2818dd2`);
       const data = await response.json();
       setNews(data.articles);
     } catch (error) {
