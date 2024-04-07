@@ -1,5 +1,9 @@
 # ReachNewsPOC
 
-npm install
+npm install 
+
+
 npm start
+
+
 connect your device/emulator
