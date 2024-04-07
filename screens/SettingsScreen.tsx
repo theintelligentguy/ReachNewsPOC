@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next'; // Import translation hook
+import { useTheme } from '@react-navigation/native'; // Import useTheme hook
 
 const SettingsScreen: React.FC = () => {
   const { t, i18n } = useTranslation(); // Translation hook
+  const { colors } = useTheme(); // Access theme colors
   const [language, setLanguage] = useState('en');
 
   const toggleLanguage = () => {
@@ -13,11 +15,22 @@ const SettingsScreen: React.FC = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>{t('Settings')}</Text>
+    <View style={styles.container}>
+      <Text style={[styles.settingsText, { color: colors.text }]}>{t('Settings')}</Text>
       <Button title={t('Toggle Language')} onPress={toggleLanguage} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  settingsText: {
+    fontSize: 18,
+  },
+});
 
 export default SettingsScreen;

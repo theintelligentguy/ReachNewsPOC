@@ -1,72 +1,104 @@
-// App.tsx
-
-import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import React, { createContext, useState, useContext } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; // Add this import
+import { useTranslation } from 'react-i18next';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MainScreen from './screens/MainScreen';
 import DetailScreen from './screens/DetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import { useTranslation } from 'react-i18next';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import './src/i18n';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator(); // Create the bottom tab navigator
 
-const App: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const { t } = useTranslation();
+// Define the context for dark mode
+const DarkModeContext = createContext<{ isDarkMode: boolean; toggleDarkMode: () => void }>({
+  isDarkMode: false,
+  toggleDarkMode: () => {},
+});
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+// Custom hook to use the dark mode context
+const useDarkMode = () => useContext(DarkModeContext);
 
-  const theme = isDarkMode ? DarkTheme : DefaultTheme;
+// Component for toggling dark mode
+const ToggleDarkModeButton: React.FC = () => {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <ThemeProvider value={theme}>
-      <NavigationContainer theme={theme}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={TabNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTitleStyle: styles.screenTitle }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ThemeProvider>
+    <TouchableOpacity onPress={toggleDarkMode} style={styles.buttonContainer}>
+      <MaterialCommunityIcons
+        name={isDarkMode ? 'weather-sunny' : 'weather-night'}
+        style={[styles.icon, { color: isDarkMode ? 'white' : 'black' }]}
+      />
+    </TouchableOpacity>
   );
 };
 
+const App: React.FC = () => {
+  const { t } = useTranslation();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Toggle function for dark mode
+  const toggleDarkMode = () => {
+    setIsDarkMode((prevMode) => !prevMode);
+  };
+
+  // Set the theme based on dark mode state
+  const theme = isDarkMode ? DarkTheme : DefaultTheme;
+
+  return (
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+      <ThemeProvider value={theme}>
+        <NavigationContainer theme={theme}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={TabNavigator} // Use the TabNavigator component here
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTitleStyle: styles.screenTitle }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    </DarkModeContext.Provider>
+  );
+};
+
+// Define your TabNavigator component
 const TabNavigator: React.FC = () => {
   const { t } = useTranslation();
+  const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use the useDarkMode hook to access dark mode state and toggle function
 
   return (
     <Tab.Navigator>
       <Tab.Screen
         name={t('News')}
         component={MainScreen}
-        options={{
+        options={({ navigation }) => ({
           tabBarLabel: t('News'),
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="newspaper" color={color} size={size} />
           ),
-        }}
+          headerRight: () => (
+            <ToggleDarkModeButton /> // Add the dark mode toggle button to the header of the News tab
+          ),
+        })}
       />
       <Tab.Screen
         name={t('Settings')}
         component={SettingsScreen}
-        options={{
+        options={({ navigation }) => ({
           tabBarLabel: t('Settings'),
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="cog" color={color} size={size} />
           ),
-        }}
+          headerRight: () => (
+            <ToggleDarkModeButton /> // Add the dark mode toggle button to the header of the Settings tab
+          ),
+        })}
       />
     </Tab.Navigator>
   );
