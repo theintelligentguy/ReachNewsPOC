@@ -1,9 +1,10 @@
-// MainScreen.tsx
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TextInput, RefreshControl, Image, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const { t } = useTranslation(); // Translation hook
+
   const [news, setNews] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -30,6 +31,7 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   const renderNewsItem = ({ item }: { item: any }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Detail', { newsItem: item })}>
+
       <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         <Image source={{ uri: item.urlToImage }} style={{ width: 100, height: 100 }} />
         <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{item.title}</Text>
@@ -41,7 +43,7 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   return (
     <View>
       <TextInput
-        placeholder="Search news..."
+        placeholder={t('Search news...')} // Translate the placeholder text
         value={searchTerm}
         onChangeText={setSearchTerm}
         style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}
