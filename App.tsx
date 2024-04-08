@@ -8,9 +8,12 @@ import MainScreen from './screens/MainScreen';
 import DetailScreen from './screens/DetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+<<<<<<< HEAD
 import DeepLinkHandler from './components/DeepLinkHandler';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from './interface/types';
+=======
+>>>>>>> 5bcb51179daa9d155432ae72830ecb5b72c6bac2
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,6 +71,7 @@ const App: React.FC = () => {
   );
 };
 
+// Define your TabNavigator component
 const TabNavigator: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
