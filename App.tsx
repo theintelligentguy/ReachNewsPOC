@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; // Add this import
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import { useTranslation } from 'react-i18next';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MainScreen from './screens/MainScreen';
@@ -67,6 +67,7 @@ const App: React.FC = () => {
   );
 };
 
+// Define your TabNavigator component
 const TabNavigator: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use the useDarkMode hook to access dark mode state and toggle function

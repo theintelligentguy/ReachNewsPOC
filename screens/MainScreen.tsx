@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, RefreshControl, Image, TouchableOpacity, TextStyle } from 'react-native';
+import { View, Text, FlatList, TextInput, RefreshControl, Image, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@react-navigation/native'; // Import useTheme hook
+import { NewsItem } from '../interface/types'; // Import NewsItem type definition
 
 const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const { t } = useTranslation(); // Translation hook
   const { colors } = useTheme(); // Access the current theme colors
 
-  const [news, setNews] = useState<any[]>([]);
+  const [news, setNews] = useState<NewsItem[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -19,6 +20,7 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     try {
       const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=29120241a6c74483b9810245c2818dd2`);
       const data = await response.json();
+      
       setNews(data.articles);
     } catch (error) {
       console.error(error);
@@ -31,13 +33,13 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     setRefreshing(false);
   };
 
-  const renderNewsItem = ({ item }: { item: any }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail', { newsItem: item })}>
+  const renderNewsItem = ({ item }: { item: NewsItem }) => (
+    <TouchableOpacity onPress={() => navigation.navigate('Detail', { news: item })}>
       <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
         {item.urlToImage ? (
-          <Image source={{ uri: item.urlToImage }} style={{ width: 150, height: 150, borderRadius:5 }} />
+          <Image source={{ uri: item.urlToImage }} style={{ width: 150, height: 150, borderRadius: 5 }} />
         ) : (
-          <Image source={require('../assets/NotFound.png')} style={{ width: 150, height: 150 , borderRadius:5}} />
+          <Image source={require('../assets/NotFound.png')} style={{ width: 150, height: 150, borderRadius: 5 }} />
         )}
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: colors.text }}>{item.title}</Text>
         <Text style={{ color: colors.text }}>{item.description}</Text>
