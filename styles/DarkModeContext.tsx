@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { Text } from 'react-native'; 
 
 type DarkModeContextType = {
   isDarkMode: boolean;
@@ -31,5 +32,9 @@ export const DarkModeProvider: React.FC<DarkModeProviderProps> = ({ children }) 
     toggleDarkMode,
   };
 
-  return <DarkModeContext.Provider value={value}>{children}</DarkModeContext.Provider>;
+  return (
+    <DarkModeContext.Provider value={value}>
+      <Text>{children}</Text>
+    </DarkModeContext.Provider>
+  );
 };

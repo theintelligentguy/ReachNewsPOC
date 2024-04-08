@@ -1,19 +1,17 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { useTheme } from '@react-navigation/native'; // Import useTheme hook
-import { NewsItem } from '../interface/types'; // Import the News interface
+import { useTheme } from '@react-navigation/native';
+import { NewsItem } from '../interface/types';
 
 const DetailScreen: React.FC<{ route: any }> = ({ route }) => {
   const { news }: { news: NewsItem } = route.params;
-  const { colors } = useTheme(); // Access theme colors
+  const { colors } = useTheme();
 
-  // Ensure that newsItem conforms to the News interface
   const typedNewsItem = news as NewsItem;
 
   return (
     <View style={styles.container}>
-    <Image source={{ uri: typedNewsItem.urlToImage || '' }} style={styles.image} />
-      
+      <Image source={{ uri: typedNewsItem.urlToImage || '' }} style={styles.image} />
       <Text style={[styles.title, { color: colors.text }]}>{typedNewsItem.title}</Text>
       <Text style={[styles.description, { color: colors.text }]}>{typedNewsItem.description}</Text>
       <Text style={[styles.text, { color: colors.text }]}><Text style={styles.boldText}>Author:</Text> {typedNewsItem.author}</Text>

@@ -1,41 +1,50 @@
-// DeepLinkHandler.tsx
-
 import React, { useEffect } from 'react';
-import { Linking, EventSubscription } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { Linking } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../interface/types';
 
-const DeepLinkHandler = () => {
-  const navigation = useNavigation();
-  let linkEventListener: EventSubscription | null = null;
+type DeepLinkHandlerProps = {
+  navigation: StackNavigationProp<RootStackParamList>;
+};
 
+const DeepLinkHandler: React.FC<DeepLinkHandlerProps> = ({ navigation }) => {
   useEffect(() => {
-    const handleDeepLink = async (url: string) => {
-      const route = url.replace(/.*?:\/\//g, ''); // Extract route from URL
-
-      // Define the screen based on the route
-      let screen: string | undefined;
-      if (route === 'detail') {
-        screen = 'Detail'; // Update screen name for 'detail' route
+    const handleDeepLink = (url: string) => {
+      const route = url.split('/').pop();
+      if (route === 'deeplink') {
+        const params = new URLSearchParams(url.split('?')[1]);
+        const newsItem = {
+          source: { id: null, name: params.get('sourceName') || '' },
+          author: params.get('author') || '',
+          title: params.get('title') || '',
+          description: params.get('description') || '',
+          url: params.get('url') || '',
+          urlToImage: params.get('urlToImage') || '',
+          publishedAt: params.get('publishedAt') || '',
+          content: params.get('content') || '',
+        };
+        navigation.navigate('Detail', { news: newsItem });
       }
+    };
 
-      // Navigate to the screen if it's a valid screen name
-      switch (screen) {
-        case 'Detail':
-          navigation.navigate('Detail' as never);
-          break;
-        default:
-          break;
+    const handleInitialDeepLink = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      if (initialUrl) {
+        handleDeepLink(initialUrl);
       }
     };
 
-    linkEventListener = Linking.addEventListener('url', ({ url }) => handleDeepLink(url));
-
-    return () => {
-      if (linkEventListener) {
-        linkEventListener.remove();
-      }
+    const urlEventHandler = (event: { url: string }) => {
+      handleDeepLink(event.url);
     };
-  }, [navigation]);
+
+    Linking.addEventListener('url', urlEventHandler);
+
+    handleInitialDeepLink();
+
+    // No need to remove event listener
+
+  }, [navigation]); // Ensure navigation is added as a dependency
 
   return null;
 };

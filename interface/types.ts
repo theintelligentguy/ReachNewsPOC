@@ -1,4 +1,3 @@
-// types.ts
 export interface NewsItem {
   source: {
     id: string | null;
@@ -12,3 +11,8 @@ export interface NewsItem {
   publishedAt: string;
   content: string | null;
 }
+
+export type RootStackParamList = {
+  Home: undefined; // No additional parameters expected for the Home screen
+  Detail: { news: NewsItem }; // Detail screen expects a news object as a parameter
+};
