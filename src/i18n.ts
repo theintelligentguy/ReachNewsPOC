@@ -19,4 +19,9 @@ i18n
     }
   });
 
+// Add the changeLanguage function
+export const changeLanguage = (newLanguage: string) => {
+  i18n.changeLanguage(newLanguage);
+};
+
 export default i18n;

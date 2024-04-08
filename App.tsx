@@ -59,7 +59,7 @@ const App: React.FC = () => {
                 headerShown: false,
               }}
             />
-            <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTitleStyle: styles.screenTitle }} />
+            <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTitleStyle: styles.screenTitle}} />
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
@@ -67,7 +67,6 @@ const App: React.FC = () => {
   );
 };
 
-// Define your TabNavigator component
 const TabNavigator: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use the useDarkMode hook to access dark mode state and toggle function
@@ -113,7 +112,6 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     fontSize: 20,
-    color: 'black',
   },
 });
 

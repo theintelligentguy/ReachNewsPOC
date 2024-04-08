@@ -34,27 +34,33 @@ const MainScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
   const renderNewsItem = ({ item }: { item: any }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Detail', { newsItem: item })}>
       <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-        <Image source={{ uri: item.urlToImage }} style={{ width: 100, height: 100 }} />
+        {item.urlToImage ? (
+          <Image source={{ uri: item.urlToImage }} style={{ width: 150, height: 150, borderRadius:5 }} />
+        ) : (
+          <Image source={require('../assets/NotFound.png')} style={{ width: 150, height: 150 , borderRadius:5}} />
+        )}
         <Text style={{ fontSize: 16, fontWeight: 'bold', color: colors.text }}>{item.title}</Text>
         <Text style={{ color: colors.text }}>{item.description}</Text>
       </View>
     </TouchableOpacity>
   );
+  
 
   return (
     <View>
-     <TextInput
-  placeholder={t('Search news...')} // Translate the placeholder text
-  value={searchTerm}
-  onChangeText={setSearchTerm}
-  style={{
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    color: colors.text,  opacity: 0.6
-  }}
-  placeholderTextColor={`rgba(${colors.text}, 0.2)`} // Set placeholder text color with opacity
-    />
+      <TextInput
+        placeholder={t('Search news...')} // Translate the placeholder text
+        value={searchTerm}
+        onChangeText={setSearchTerm}
+        style={{
+          padding: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: '#ccc',
+          color: colors.text,
+          opacity: 0.6
+        }}
+        placeholderTextColor={`rgba(${colors.text}, 0.2)`} // Set placeholder text color with opacity
+      />
 
       <FlatList
         data={news.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()))}

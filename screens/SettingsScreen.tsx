@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+// SettingsScreen.tsx
+
+import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { useTranslation } from 'react-i18next'; // Import translation hook
-import { useTheme } from '@react-navigation/native'; // Import useTheme hook
+import { useTranslation } from 'react-i18next';
+import { useTheme } from '@react-navigation/native';
+import { changeLanguage } from '../src/i18n'; // Import the changeLanguage function
 
 const SettingsScreen: React.FC = () => {
-  const { t, i18n } = useTranslation(); // Translation hook
-  const { colors } = useTheme(); // Access theme colors
-  const [language, setLanguage] = useState('en');
+  const { t, i18n } = useTranslation();
+  const { colors } = useTheme();
 
   const toggleLanguage = () => {
-    const newLanguage = language === 'en' ? 'ar' : 'en'; 
-    setLanguage(newLanguage);
-    i18n.changeLanguage(newLanguage); // Change language in real-time
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en'; 
+    changeLanguage(newLanguage); // Call the changeLanguage function
   };
 
   return (
