@@ -1,3 +1,5 @@
+// App.tsx
+
 import React, { createContext, useState, useContext } from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,6 +10,7 @@ import MainScreen from './screens/MainScreen';
 import DetailScreen from './screens/DetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import DeepLinkHandler from './components/DeepLinkHandler'; // Import the DeepLinkHandler component
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator(); // Create the bottom tab navigator
@@ -61,13 +64,13 @@ const App: React.FC = () => {
             />
             <Stack.Screen name="Detail" component={DetailScreen} options={{ headerTitleStyle: styles.screenTitle}} />
           </Stack.Navigator>
+          <DeepLinkHandler /> {/* Add DeepLinkHandler component */}
         </NavigationContainer>
       </ThemeProvider>
     </DarkModeContext.Provider>
   );
 };
 
-// Define your TabNavigator component
 const TabNavigator: React.FC = () => {
   const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode(); // Use the useDarkMode hook to access dark mode state and toggle function
